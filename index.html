@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Titile -->
+        <!-- Meta tags -->
+        <!-- Stylesheets -->
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Scripts -->
+        <!--<script src="scripts/user_location.js"></script>-->
+        <script src="scripts/months_days.js"></script>
+        <script src="scripts/nav.js"></script>
+        <script src="scripts/getNamedays.js"></script>
+    </head>
+    <header>
+        <div id="namedays-today-container">
+            <div id="date-today"></div>
+            <p id="names-today" class="result"></p>
+        </div>
+        <nav id="nav">
+            <ul>
+                <li id="by-name-nav-item" class="nav-item active">By name</li>
+                <li id="by-date-nav-item" class="nav-item">By date</li>
+                <li id="this-week-nav-item" class="nav-item">This week</li>
+            </ul>
+            <ul>
+                <li>Location:
+                    <select id="location-select"></select>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <body>
+        <div id="by-name-container" class="container active">
+            <h1>Search nameday by name</h1>
+            <label>Name</label>
+            <input id="by-name-input">
+            <button id="find-by-name">Find</button>
+            <div class="result">
+                <h3 class="result__title">Matching namedays for</h3>
+                <h2 class="result__search-value"></h2>
+                <p class="result__output"></p>
+            </div>
+        </div>
+        <div id="by-date-container" class="container">
+            <h1>Search nameday by date</h1>
+            <label>Month</label>
+            <select id="month-select">
+                <option value="0" disabled selected>Select month</option>
+            </select>
+            <label>Day</label>
+            <select id="day-select">
+                <option value="0" disabled selected>Select day</option>
+            </select>
+            <button id="find-by-date">Find</button>
+            <div class="result"></div>
+        </div>
+        <div id="this-week-container" class="container">
+            <h1>Namedays this week</h1>
+        </div>
+    </body>
+    <footer>
+        
+    </footer>
+</html>
