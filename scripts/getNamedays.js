@@ -4,7 +4,7 @@ $(document).ready(function() {
     $dateToday = $("#date-today");
     $namesToday = $("#names-today");
     $locationSelect = $("#location-select");
-    $weekResultContainer = $("#this-week-container");
+    $weekResultContainer = $("#this-week-container #result-container");
     $byDateResultsContainer = $("#by-date-container .result");
     $byNameResultsContainer = $("#by-name-container .result");
     $nameInput = $("#by-name-input");
@@ -18,7 +18,7 @@ $(document).ready(function() {
             name() {
                 $inputValue = $nameInput.val().toLocaleLowerCase();
                 if ( $inputValue != "" ) {
-                    if ( !(!!$inputValue.match(/^[a-z]*$/i)) ) {
+                    if ( !(!!$inputValue.match(/^[a-z]/)) ) {
                         $byNameResultsContainer.append(`<p class="result__error">Please input valid name.</p>`);
                         return false;
                     } else if ( $inputValue.length < 3 ) {
@@ -81,6 +81,7 @@ $(document).ready(function() {
                     var dayIndex = data.get.date.getDay() - 1;
                     var monthIndex = data.get.date.getMonth();
                     $dateToday.html(`${data.get.dayNames[dayIndex]}, ${data.get.monthNames[monthIndex]} ${day}`);
+                    $namesToday.html("Loading...");
                     $.ajax({
                         url: `https://api.abalin.net/namedays?country=${data.get.countryCode()}&month=${monthIndex+1}&day=${day}`,
                         success: function(response){
@@ -96,6 +97,7 @@ $(document).ready(function() {
                     });
                 },
                 thisWeek(month, day, weekDay) {
+                    $("#week-result-" + weekDay + " .result__output").html("Loading...");
                     $.ajax({
                         url: `https://api.abalin.net/namedays?country=${data.get.countryCode()}&month=${month}&day=${day}`,
                         success: function(response){
@@ -111,6 +113,7 @@ $(document).ready(function() {
                     });
                 },
                 byDate(month, day) {
+                    $byDateResultsContainer.children(".result__output").html("Loading...");
                     $(`#month-select option[value="0"]`).removeAttr("selected").attr('selected', true);
                     $(`#day-select option[value="0"]`).removeAttr("selected").attr('selected', true);
                     $.ajax({
@@ -128,16 +131,29 @@ $(document).ready(function() {
                     });
                 },
                 byName(name) {
+                    $byNameResultsContainer.append(`<h2 class="result__output">Loading...</h2>`);
                     $.ajax({
                         url: `https://api.abalin.net/getdate?name=${name}&country=${data.get.countryCode()}`,
                         success: function(response){
+                            $byNameResultsContainer.children(".result__output")[0].remove();
                             if ( response.results.length == 0 ) {
-                                $byNameResultsContainer.append(`<p class="result__output">There are no namedays on this day :(</p>`);
+                                $byNameResultsContainer.append(`<h2 class="result__output">There are no namedays on this day :(</h2>`);
                             } else {
+                                $matchingName = false;
                                 for ( var i = 0; i < response.results.length; i++ ) {
+                                    $matchingName = false;
+                                    $responseNames = response.results[i].name.split(',');
+                                    for( var j = 0; j < $responseNames.length; j++ ) {
+                                        console.log(name == $responseNames[j].replace(/\s/g, ''));
+                                        if (name == $responseNames[j].replace(/\s/g, '')) {
+                                            $matchingName = true;
+                                        }
+                                    }
                                     $responseMonth = response.results[i].month;
                                     $responseDay = response.results[i].day;
-                                    $byNameResultsContainer.append(`<p class="result__output">${data.get.monthNames[$responseMonth-1]} ${$responseDay}</p>`);
+                                    if ($matchingName == true) {
+                                        $byNameResultsContainer.append(`<h2 class="result__output">${data.get.monthNames[$responseMonth-1]} ${$responseDay}</h2>`);
+                                    }
                                 }
                             }
                         },
@@ -156,7 +172,7 @@ $(document).ready(function() {
                     $thisDay = new Date(data.get.date);
                     $thisDay.setDate($today.getDate() - ($today.getDay() - (i + 1)));
                     $weekResultContainer.append(`<div id="week-result-${i}" class="result"></div>`);
-                    $("#week-result-" + i).append(`<h3 class="result__search-value">${data.get.dayNames[i].substring(0, 3)}, ${data.get.monthNames[$thisDay.getMonth() + 1]} ${$thisDay.getDate()}</h3>`);
+                    $("#week-result-" + i).append(`<h3 class="result__title">${data.get.dayNames[i].substring(0, 3)}, ${data.get.monthNames[$thisDay.getMonth() + 1]} ${$thisDay.getDate()}</h3>`);
                     $("#week-result-" + i).append(`<p class="result__output"></p>`);
                     data.get.nameday.thisWeek(($thisDay.getMonth() + 1), $thisDay.getDate(), i);
                 }
@@ -164,15 +180,15 @@ $(document).ready(function() {
             byDateResults() {
                 if ( data.validate.month() && data.validate.day() ) {
                     $byDateResultsContainer.append(`<h3 class="result__title">Namedays on</h3>`);
-                    $byDateResultsContainer.append(`<h2 class="result__search-value">${data.get.monthNames[data.get.month()-1]} ${data.get.day()}</h2>`);
-                    $byDateResultsContainer.append(`<p class="result__output"></p>`);
+                    $byDateResultsContainer.append(`<p class="result__search-value">${data.get.monthNames[data.get.month()-1]} ${data.get.day()}</p>`);
+                    $byDateResultsContainer.append(`<h2 class="result__output"></h2>`);
                     data.get.nameday.byDate(data.get.month(), data.get.day());
                 }
             },
             byNameResults() {
                 if ( data.validate.name() ) {
                     $byNameResultsContainer.append(`<h3 class="result__title">Matching namedays for</h3>`);
-                    $byNameResultsContainer.append(`<h2 class="result__search-value">${data.get.name()}</h2>`);
+                    $byNameResultsContainer.append(`<p class="result__search-value">${data.get.name()}</p>`);
                     data.get.nameday.byName(data.get.name());
                 }
             },
