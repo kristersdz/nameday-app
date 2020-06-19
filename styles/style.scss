@@ -1,0 +1,144 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif;
+}
+button {
+	margin-right: 10px;
+	padding: 10px 30px;
+	cursor: pointer;
+	background: #fc7439;
+	border: none;
+	border-radius: 5px;
+	outline: none;
+	color: #fff;
+	transition: .3s;
+	&:hover {
+		box-shadow: 0px 0px 10px #fc7439;
+	}
+}
+input {
+	margin-right: 75px;
+	padding: 10px 10px;
+	width: 100px;
+	border: none;
+	border-radius: 5px;
+	outline: none;
+}
+html {
+	background: #fdf9f4;
+}
+header {
+	#namedays-today-container {
+		padding: 10px 40px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 90px;
+		background: #336BEC;
+		border-radius: 0 0 10px 10px;
+		font-size: 14px;
+		color: #fff;
+		z-index: -1;
+		#date-today {
+			font-weight: 600;
+		}
+	}
+	nav {
+		margin: 0 40px;
+		padding: 0 20px;
+		margin-top: 60px;
+		border-radius: 10px;
+		background: #fff;
+		box-shadow: 0px 5px 20px #c3c3c3;
+		font-size: 14px;
+		ul {
+			list-style: none;
+			display: flex;
+			li {
+				padding: 5px 0;
+				margin: 10px 10px;
+				cursor: pointer;
+				&:hover {
+					&:not(:last-child) {
+						border-bottom: solid 2px #336BEC;
+						color: #336BEC;
+					}
+				}
+				&:last-child {
+					margin-left: auto;
+					cursor: default;
+					select {
+						cursor: pointer;
+						border: none;
+						outline: none;
+					}
+				}
+			}
+			li.active {
+				&:not(:last-child) {
+					border-bottom: solid 2px #336BEC;
+					color: #336BEC;
+				}
+			}
+		}
+	}
+}
+.container {
+	padding: 10px 40px;
+	h1 {
+		margin: 20px 0;
+	}
+	.search-properties {
+		display: inline-flex;
+		padding: 10px 0;
+		background: #fff;
+		border-radius: 5px;
+		.input-container {
+			display: inline-flex;
+			font-size: 14px;
+			p {
+				margin-left: 10px;
+				padding: 10px 0;
+			}
+			select {
+				margin-right: 10px;
+				padding: 10px 5px;
+				border: none;
+				outline: none;
+				font-size: 14px;
+			}
+		}
+	}
+	.result__title {
+		margin: 20px 0 10px 0;
+	}
+	.result__search-value {
+		font-style: italic;
+	}
+	.result__output {
+		margin: 20px 0;
+	}
+}
+#this-week-container {
+	#result-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		grid-gap: 20px;
+		.result {
+			background: #fff;
+			padding: 10px;
+			border-radius: 10px;
+			box-shadow: 0px 5px 20px #c3c3c3;
+		}
+	}
+}
+@media screen and (max-width: 480px) {
+	.container {
+		.search-properties {
+			display: block;
+		}
+	}
+}
