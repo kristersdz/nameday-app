@@ -196,6 +196,7 @@ $(document).ready(function() {
         "hide": {
             results() {
                 $(".result").empty();
+                $("#result-container").empty();
             }
         },
     }
