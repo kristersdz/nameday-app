@@ -18,7 +18,7 @@ $(document).ready(function() {
             name() {
                 $inputValue = $nameInput.val().toLocaleLowerCase();
                 if ( $inputValue != "" ) {
-                    if ( !(!!$inputValue.match(/^[a-z]/)) ) {
+                    if ( !(RegExp(/^\p{L}*$/,'u').test($inputValue)) ) {
                         $byNameResultsContainer.append(`<p class="result__error">Please input valid name.</p>`);
                         return false;
                     } else if ( $inputValue.length < 3 ) {
@@ -86,7 +86,7 @@ $(document).ready(function() {
                         url: `https://api.abalin.net/namedays?country=${data.get.countryCode()}&month=${monthIndex+1}&day=${day}`,
                         success: function(response){
                             if ( response.data.namedays[data.get.countryCode()] == "n/a" ) {
-                                $namesToday.html(`There are no namedays on this day :(`);
+                                $namesToday.html(`There are no namedays on today :(`);
                             } else {
                                 $namesToday.html(response.data.namedays[data.get.countryCode()]);
                             }
@@ -120,7 +120,7 @@ $(document).ready(function() {
                         url: `https://api.abalin.net/namedays?country=${data.get.countryCode()}&month=${month}&day=${day}`,
                         success: function(response){
                             if ( response.data.namedays[data.get.countryCode()] == "n/a" ) {
-                                 $byDateResultsContainer.children(".result__output").html(`There are no namedays on this day :(`);
+                                 $byDateResultsContainer.children(".result__output").html(`There are no namedays on your chosen day :(`);
                             } else {
                                  $byDateResultsContainer.children(".result__output").html(response.data.namedays[data.get.countryCode()]);
                             }
@@ -137,7 +137,7 @@ $(document).ready(function() {
                         success: function(response){
                             $byNameResultsContainer.children(".result__output")[0].remove();
                             if ( response.results.length == 0 ) {
-                                $byNameResultsContainer.append(`<h2 class="result__output">There are no namedays on this day :(</h2>`);
+                                $byNameResultsContainer.append(`<h2 class="result__output">This name doesn't have nameday :(</h2>`);
                             } else {
                                 $matchingName = false;
                                 for ( var i = 0; i < response.results.length; i++ ) {
